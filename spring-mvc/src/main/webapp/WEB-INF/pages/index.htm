@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+
+<script src="https://code.jquery.com/jquery-3.6.1.js"></script>
+
+<script type="text/javascript">
+
+$(document).ready(function() {
+    $.ajax({
+        url: "http://localhost:8090/spring-mvc/response"
+    }).then(function(data) {
+       $('.id').append(data.id);
+       $('.name').append(data.name);
+       $('.address').append(data.address);
+       $('.job').append(data.job);
+    });
+});
+
+</script>
+
+</head>
+<body> 
+HTML Pages Accessing in Spring MVC
+
+<br/><br/>
+
+Id : <label class="id"></label><br/>
+Name : <label class="name"></label><br/>
+Address : <label class="address"></label><br/>
+Job : <label class="job"></label>
+
+<br/><br/>
+
+<p class="id">The ID is </p>
+<p class="name">The Name is </p>
+<p class="address">The Address is </p>
+<p class="job">The Job is </p>
+            
+</body>
+</html>

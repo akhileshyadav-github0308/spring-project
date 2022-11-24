@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://code.jquery.com/jquery-3.6.1.js"></script>
+
+<script type="text/javascript">
+
+$("form").submit(function(event) {
+	event.preventDefault();
+	let pnrNo=$("#pnrNo").val();
+	
+	let url='http://localhost:8090/spring-mvc/pnr-status?pnrno='+pnrNo;
+	
+	$.ajax({
+		url:url,
+		method:'GET',
+		Success: function(data) {
+			alert(JSON.stringify(data));
+		}
+	})
+	
+})
+
+</script>
+</head>
+<body>
+<form action="">
+Enter PNR No. :<input id="pnrNo"/>
+<button type="submit">Check Status</button>
+</form>
+
+</body>
+</html>
