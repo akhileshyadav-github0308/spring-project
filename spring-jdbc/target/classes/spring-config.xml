@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+         http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+	<!-- bean definitions here -->
+
+
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName"
+			value="org.apache.derby.jdbc.ClientDriver" />
+		<property name="url" value="jdbc:derby://localhost:1527/training" />
+		<property name="username" value="derby" />
+		<property name="password" value="derby" />
+	</bean>
+	
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+	    <property name="dataSource" ref="dataSource"/>
+	</bean>
+	
+	<!--   Setting required for enablig Hibernate/JPA -->
+	<!--   This bean entry creates the EntityManager -->
+	
+	<!--  This bean is required   -->
+	
+	<!-- 
+	
+	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource"
+        destroy-method="close">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://localhost:3306/test" />
+        <property name="username" value="root" />
+        <property name="password" value="password" />
+    </bean>
+     -->
+	
+	 
+
+
+	<!-- Loading annotaion beans -->
+	<context:component-scan base-package="com.abm" />
+	
+	
+	<!-- ===== settings required for enabling Hibernate/JPA ==== -->
+	<!--  This bean entry creates the EntityManagerFactory object
+		  required when using Hibernate/JPA in our applications
+		  Also we don't require separate META-INF/persistence.xml
+		  file as the required settings for the ORM can be done
+		  within this bean configuration itself -->
+	<bean id="myEmf" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+	    <property name="dataSource" ref="dataSource" /> <!-- DataSource -->
+	    <property name="packagesToScan" value="com.abm.component" /> <!-- Location of @Entity classes -->
+	    <property name="jpaVendorAdapter">
+	        <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
+	    </property>
+	    <property name="jpaProperties">
+	        <props>
+	            <!-- <prop key="hibernate.hbm2ddl.auto">update</prop> -->
+	            <prop key="hibernate.show_sql">true</prop>
+	        </props>
+	    </property>
+	</bean>
+	
+	<!-- This bean entry is required for enabling transaction
+		 support in our application -->
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+    	<property name="entityManagerFactory" ref="myEmf" />
+	</bean>
+	
+	<tx:annotation-driven />
+
+
+</beans>
+
